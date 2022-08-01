@@ -1,0 +1,31 @@
+{
+  "applications": ["quote"],
+  "changelogDate": "20220801072334",
+  "clientRootFolder": "quote",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "quote_rating",
+  "fields": [
+    {
+      "fieldName": "isLike",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "quote",
+  "name": "QuoteRating",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "userData",
+      "otherEntityRelationshipName": "quoteRating",
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": true,
+  "service": "serviceImpl"
+}

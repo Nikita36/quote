@@ -1,0 +1,44 @@
+application {
+  config {
+    baseName quote
+    applicationType microservice
+    serverPort 8080
+    enableSwaggerCodegen true
+    devDatabaseType h2Memory
+    searchEngine elasticsearch
+    skipClient true
+    serviceDiscoveryType no
+    authenticationType jwt
+  }
+   entities *
+   dto * with mapstruct
+   service * with serviceImpl
+   paginate UserData with pagination
+}
+
+
+
+entity UserData {
+	username String
+	name String
+    lastName String
+    mail String
+    password String
+}
+
+entity Quote {
+	content String
+}
+
+entity QuoteRating {
+	isLike Boolean
+}
+relationship OneToMany {
+	UserData{quoteRating} to QuoteRating{user}
+}
+    
+relationship OneToOne {
+    Quote{author} to UserData{quote} 
+}
+
+

@@ -99,11 +99,4 @@ public class UserDataServiceImpl implements UserDataService {
         log.debug("Request to delete UserData : {}", id);
         userDataRepository.deleteById(id);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<UserDataDTO> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of UserData for query {}", query);
-        return userDataRepository.search(query, pageable).map(userDataMapper::toDto);
-    }
 }

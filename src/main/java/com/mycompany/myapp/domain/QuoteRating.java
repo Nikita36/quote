@@ -25,6 +25,9 @@ public class QuoteRating implements Serializable {
     @Column(name = "is_like")
     private Boolean isLike;
 
+    @Column(name = "quote_id")
+    private Long quote_id;
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "quoteRatings", "quote" }, allowSetters = true)
     private UserData user;
@@ -96,5 +99,13 @@ public class QuoteRating implements Serializable {
             "id=" + getId() +
             ", isLike='" + getIsLike() + "'" +
             "}";
+    }
+
+    public Long getQuote_id() {
+        return quote_id;
+    }
+
+    public void setQuote_id(Long quote_id) {
+        this.quote_id = quote_id;
     }
 }

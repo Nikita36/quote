@@ -26,7 +26,6 @@ public class LoggingConfiguration {
         ObjectMapper mapper
     ) throws JsonProcessingException {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-
         Map<String, String> map = new HashMap<>();
         map.put("app_name", appName);
         map.put("app_port", serverPort);

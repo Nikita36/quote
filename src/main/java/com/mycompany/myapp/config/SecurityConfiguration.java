@@ -51,23 +51,13 @@ public class SecurityConfiguration {
                 .authenticationEntryPoint(problemSupport)
                 .accessDeniedHandler(problemSupport)
         .and()
-            .headers()
-            .contentSecurityPolicy(jHipsterProperties.getSecurity().getContentSecurityPolicy())
-        .and()
-            .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
-        .and()
-            .permissionsPolicy().policy("camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()")
-        .and()
-            .frameOptions()
-            .deny()
-        .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/**").permitAll()
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/health/**").permitAll()
             .antMatchers("/management/info").permitAll()
@@ -76,7 +66,6 @@ public class SecurityConfiguration {
         .and()
             .apply(securityConfigurerAdapter());
         return http.build();
-        // @formatter:on
     }
 
     private JWTConfigurer securityConfigurerAdapter() {

@@ -1,7 +1,7 @@
 # ===================================================================
 # Spring Boot configuration for the "dev" profile.
 #
-# This configuration overrides the application.yml file.
+# This configuration overrides the properties.yml file.
 #
 # More information on profiles: https://www.jhipster.tech/profiles/
 # More information on configuration properties: https://www.jhipster.tech/common-application-properties/
@@ -19,11 +19,6 @@ logging:
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
     com.mycompany.myapp: DEBUG
-
-management:
-  health:
-    elasticsearch:
-      enabled: false
 
 spring:
   devtools:
@@ -49,8 +44,6 @@ spring:
       enabled: false
   jpa:
     database-platform: tech.jhipster.domain.util.FixedH2Dialect
-  elasticsearch:
-    uris: http://localhost:9200
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
@@ -74,7 +67,7 @@ spring:
         enabled: true
 
 server:
-  port: 8080
+  port: 8081
 
 # ===================================================================
 # JHipster specific properties

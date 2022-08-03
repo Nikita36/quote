@@ -9,7 +9,10 @@
     <!--
         Added the entity UserData.
     -->
-    <changeSet id="20220801072134-1" author="jhipster">
+    <changeSet id="20220801072134-12" author="jhipster">
+        <dropTable tableName="QUOTE"></dropTable>
+        <dropTable tableName="quote_rating"></dropTable>
+        <dropTable tableName="user_data"></dropTable>
         <createTable tableName="user_data">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>

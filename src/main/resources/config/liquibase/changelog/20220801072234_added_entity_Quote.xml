@@ -9,7 +9,7 @@
     <!--
         Added the entity Quote.
     -->
-    <changeSet id="20220801072234-1" author="jhipster">
+    <changeSet id="20220801072234-12" author="jhipster">
         <createTable tableName="quote">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
@@ -17,8 +17,11 @@
             <column name="content" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="author_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_quote__author_id" />
+            <column name="user_created_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_quote__user_created_id" />
+            </column>
+            <column name="author" type="varchar(255)">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

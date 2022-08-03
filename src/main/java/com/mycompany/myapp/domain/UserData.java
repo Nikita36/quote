@@ -45,7 +45,7 @@ public class UserData implements Serializable {
     private Set<QuoteRating> quoteRatings = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "author" }, allowSetters = true)
-    @OneToOne(mappedBy = "author")
+    @OneToOne(mappedBy = "userCreated")
     private Quote quote;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -165,10 +165,10 @@ public class UserData implements Serializable {
 
     public void setQuote(Quote quote) {
         if (this.quote != null) {
-            this.quote.setAuthor(null);
+            this.quote.setUserCreated(null);
         }
         if (quote != null) {
-            quote.setAuthor(this);
+            quote.setUserCreated(this);
         }
         this.quote = quote;
     }

@@ -1,7 +1,10 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.QuoteRating;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import liquibase.pro.packaged.S;
 
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Quote} entity.
@@ -12,7 +15,11 @@ public class QuoteDTO implements Serializable {
 
     private String content;
 
-    private UserDataDTO author;
+    private String author;
+
+    private UserDataDTO userCreated;
+
+    private List<QuoteRating> rating;
 
     public Long getId() {
         return id;
@@ -30,11 +37,11 @@ public class QuoteDTO implements Serializable {
         this.content = content;
     }
 
-    public UserDataDTO getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(UserDataDTO author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
@@ -67,5 +74,21 @@ public class QuoteDTO implements Serializable {
             ", content='" + getContent() + "'" +
             ", author=" + getAuthor() +
             "}";
+    }
+
+    public UserDataDTO getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(UserDataDTO userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public List<QuoteRating> getRating() {
+        return rating;
+    }
+
+    public void setRating(List<QuoteRating> rating) {
+        this.rating = rating;
     }
 }

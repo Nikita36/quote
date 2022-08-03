@@ -54,11 +54,9 @@ public interface QuoteService {
      */
     void delete(Long id);
 
-    /**
-     * Search for the quote corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    List<QuoteDTO> search(String query);
+    List<QuoteDTO> findTopTen();
+
+    List<QuoteDTO> findFlopTen();
+
+    QuoteDTO findRandom();
 }

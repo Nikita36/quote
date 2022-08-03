@@ -84,9 +84,17 @@ public class QuoteServiceImpl implements QuoteService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<QuoteDTO> search(String query) {
-        log.debug("Request to search Quotes for query {}", query);
-        return quoteRepository.search(query).stream().map(quoteMapper::toDto).collect(Collectors.toList());
+    public List<QuoteDTO> findTopTen() {
+        return quoteMapper.toDto(quoteRepository.findTopTen());
+    }
+
+    @Override
+    public List<QuoteDTO> findFlopTen() {
+        return quoteMapper.toDto(quoteRepository.findFlopTen());
+    }
+
+    @Override
+    public QuoteDTO findRandom() {
+        return quoteMapper.toDto(quoteRepository.findRandom());
     }
 }

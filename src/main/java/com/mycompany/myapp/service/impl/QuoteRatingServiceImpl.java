@@ -82,11 +82,4 @@ public class QuoteRatingServiceImpl implements QuoteRatingService {
         log.debug("Request to delete QuoteRating : {}", id);
         quoteRatingRepository.deleteById(id);
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<QuoteRatingDTO> search(String query) {
-        log.debug("Request to search QuoteRatings for query {}", query);
-        return quoteRatingRepository.search(query).stream().map(quoteRatingMapper::toDto).collect(Collectors.toList());
-    }
 }

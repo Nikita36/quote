@@ -9,13 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Quote} and its DTO {@link QuoteDTO}.
  */
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { QuoteRatingMapper.class, UserDataMapper.class })
 public interface QuoteMapper extends EntityMapper<QuoteDTO, Quote> {
-    @Mapping(target = "author", source = "author", qualifiedByName = "userDataId")
     QuoteDTO toDto(Quote s);
-
-    @Named("userDataId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDataDTO toDtoUserDataId(UserData userData);
 }

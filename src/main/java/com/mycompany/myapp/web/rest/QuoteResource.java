@@ -1,20 +1,24 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.repository.QuoteRepository;
 import com.mycompany.myapp.service.QuoteService;
 import com.mycompany.myapp.service.dto.QuoteDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -22,7 +26,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link com.mycompany.myapp.domain.Quote}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/quotes")
 public class QuoteResource {
 
     private final Logger log = LoggerFactory.getLogger(QuoteResource.class);
@@ -34,21 +38,18 @@ public class QuoteResource {
 
     private final QuoteService quoteService;
 
-    private final QuoteRepository quoteRepository;
-
-    public QuoteResource(QuoteService quoteService, QuoteRepository quoteRepository) {
+    public QuoteResource(QuoteService quoteService) {
         this.quoteService = quoteService;
-        this.quoteRepository = quoteRepository;
     }
 
     /**
-     * {@code POST  /quotes} : Create a new quote.
+     * {@code POST  } : Create a new quote.
      *
      * @param quoteDTO the quoteDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new quoteDTO, or with status {@code 400 (Bad Request)} if the quote has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/quotes")
+    @PostMapping("")
     public ResponseEntity<QuoteDTO> createQuote(@RequestBody QuoteDTO quoteDTO) throws URISyntaxException {
         log.debug("REST request to save Quote : {}", quoteDTO);
         if (quoteDTO.getId() != null) {
@@ -56,38 +57,22 @@ public class QuoteResource {
         }
         QuoteDTO result = quoteService.save(quoteDTO);
         return ResponseEntity
-            .created(new URI("/api/quotes/" + result.getId()))
+            .created(new URI("/api/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
     /**
-     * {@code PUT  /quotes/:id} : Updates an existing quote.
+     * {@code PUT  /:id} : Updates an existing quote.
      *
-     * @param id the id of the quoteDTO to save.
      * @param quoteDTO the quoteDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated quoteDTO,
      * or with status {@code 400 (Bad Request)} if the quoteDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the quoteDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/quotes/{id}")
-    public ResponseEntity<QuoteDTO> updateQuote(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody QuoteDTO quoteDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to update Quote : {}, {}", id, quoteDTO);
-        if (quoteDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, quoteDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!quoteRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<QuoteDTO> updateQuote(@RequestBody QuoteDTO quoteDTO) {
         QuoteDTO result = quoteService.update(quoteDTO);
         return ResponseEntity
             .ok()
@@ -96,72 +81,51 @@ public class QuoteResource {
     }
 
     /**
-     * {@code PATCH  /quotes/:id} : Partial updates given fields of an existing quote, field will ignore if it is null
-     *
-     * @param id the id of the quoteDTO to save.
-     * @param quoteDTO the quoteDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated quoteDTO,
-     * or with status {@code 400 (Bad Request)} if the quoteDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the quoteDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the quoteDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/quotes/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<QuoteDTO> partialUpdateQuote(
-        @PathVariable(value = "id", required = false) final Long id,
-        @RequestBody QuoteDTO quoteDTO
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Quote partially : {}, {}", id, quoteDTO);
-        if (quoteDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, quoteDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!quoteRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<QuoteDTO> result = quoteService.partialUpdate(quoteDTO);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, quoteDTO.getId().toString())
-        );
-    }
-
-    /**
-     * {@code GET  /quotes} : get all the quotes.
+     * {@code GET  } : get all the quotes.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of quotes in body.
      */
-    @GetMapping("/quotes")
+    @GetMapping("")
     public List<QuoteDTO> getAllQuotes() {
         log.debug("REST request to get all Quotes");
         return quoteService.findAll();
     }
 
     /**
-     * {@code GET  /quotes/:id} : get the "id" quote.
+     * {@code GET  /:id} : get the "id" quote.
      *
      * @param id the id of the quoteDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the quoteDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/quotes/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<QuoteDTO> getQuote(@PathVariable Long id) {
         log.debug("REST request to get Quote : {}", id);
         Optional<QuoteDTO> quoteDTO = quoteService.findOne(id);
         return ResponseUtil.wrapOrNotFound(quoteDTO);
     }
 
+    @GetMapping("/top")
+    public List<QuoteDTO> getTop() {
+        return quoteService.findTopTen();
+    }
+
+    @GetMapping("/flop")
+    public List<QuoteDTO> getFlop() {
+        return quoteService.findFlopTen();
+    }
+
+    @GetMapping("/random")
+    public QuoteDTO getRandom() {
+        return quoteService.findRandom();
+    }
+
     /**
-     * {@code DELETE  /quotes/:id} : delete the "id" quote.
+     * {@code DELETE  /:id} : delete the "id" quote.
      *
      * @param id the id of the quoteDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/quotes/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteQuote(@PathVariable Long id) {
         log.debug("REST request to delete Quote : {}", id);
         quoteService.delete(id);
@@ -169,18 +133,5 @@ public class QuoteResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/quotes?query=:query} : search for the quote corresponding
-     * to the query.
-     *
-     * @param query the query of the quote search.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/quotes")
-    public List<QuoteDTO> searchQuotes(@RequestParam String query) {
-        log.debug("REST request to search Quotes for query {}", query);
-        return quoteService.search(query);
     }
 }

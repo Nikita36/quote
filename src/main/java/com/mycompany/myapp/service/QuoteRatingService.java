@@ -53,12 +53,4 @@ public interface QuoteRatingService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-
-    /**
-     * Search for the quoteRating corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    List<QuoteRatingDTO> search(String query);
 }

@@ -11,11 +11,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface QuoteRatingMapper extends EntityMapper<QuoteRatingDTO, QuoteRating> {
-    @Mapping(target = "user", source = "user", qualifiedByName = "userDataId")
+    @Mapping(target = "user.id", source = "user.id")
     QuoteRatingDTO toDto(QuoteRating s);
-
-    @Named("userDataId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    UserDataDTO toDtoUserDataId(UserData userData);
 }

@@ -2,6 +2,7 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -25,12 +26,19 @@ public class Quote implements Serializable {
     @Column(name = "content")
     private String content;
 
+    @Column(name = "author")
+    private String author;
+
     @JsonIgnoreProperties(value = { "quoteRatings", "quote" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
-    private UserData author;
+    private UserData userCreated;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    @OneToMany
+    @JoinColumn(name = "quote_id")
+    private List<QuoteRating> rating;
+
+    public Quote() {}
 
     public Long getId() {
         return this.id;
@@ -58,20 +66,18 @@ public class Quote implements Serializable {
         this.content = content;
     }
 
-    public UserData getAuthor() {
-        return this.author;
+    public UserData getUserCreated() {
+        return this.userCreated;
     }
 
-    public void setAuthor(UserData userData) {
-        this.author = userData;
+    public void setUserCreated(UserData userData) {
+        this.userCreated = userData;
     }
 
     public Quote author(UserData userData) {
-        this.setAuthor(userData);
+        this.setUserCreated(userData);
         return this;
     }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -86,7 +92,6 @@ public class Quote implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -97,5 +102,21 @@ public class Quote implements Serializable {
             "id=" + getId() +
             ", content='" + getContent() + "'" +
             "}";
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public List<QuoteRating> getRating() {
+        return rating;
+    }
+
+    public void setRating(List<QuoteRating> rating) {
+        this.rating = rating;
     }
 }
